@@ -2,28 +2,28 @@
 
 ## usersテーブル
 
-| Column             | Type   | Options     |
-| ------------------ | ------ | ----------- |
-| nickname           | string | null: false |
-| email              | string | null: false |
-| encrypted_password | string | null: false |
-| family_name        | text   | null: false |
-| first_name         | text   | null: false |
-| family_name_kana   | text   | null: false |
-| first_name_kana    | text   | null: false |
-| birthday           | date   | null: false |
+| Column             | Type   | Options                    |
+| ------------------ | ------ | -------------------------- |
+| nickname           | string | null: false                |
+| email              | string | null: false, unique: true  |
+| encrypted_password | string | null: false                |
+| family_name        | string | null: false                |
+| first_name         | string | null: false                |
+| family_name_kana   | string | null: false                |
+| first_name_kana    | string | null: false                |
+| birthday           | date   | null: false                |
 
 ### Association
 
 * has_many :items
-* has_many :records
+* has_many :orders
 
 
 ## items テーブル
 
 | Column            | Type          | Options                        |
 | ----------------- | ------------- | ------------------------------ |
-| user_id           | references    | foreign_key: true              |
+| user              | references    | foreign_key: true, null: false |
 | name              | string        | null: false                    |
 | price             | integer       | null: false                    |
 | description       | text          | null: false                    |
@@ -35,36 +35,36 @@
 
 ### Association
 
-- belongs_to :user
-- has_one    :record
+- belongs_to :users
+- has_one    :orders
 
 
-## record テーブル
-
-| Column         | Type          | Options                        |
-| -------------- | ------------- | ------------------------------ |
-| user_id        | references    | foreign_key: true              |
-| item_id        | references    | foreign_key: true              |
-
-### Association
-
-- belongs_to :user
-- belongs_to :items
-- has_one    :send
-
-
-## send テーブル
+## orders テーブル
 
 | Column         | Type          | Options                        |
 | -------------- | ------------- | ------------------------------ |
-| post_code      | string        | null: false                    |
-| prefecture_id  | integer       | null: false                    |
-| city           | string        | null: false                    |
-| address        | string        | null: false                    |
-| building_name  | string        |                                |
-| phone          | string        | null: false                    |
-| record_id      | references    | foreign_key: true              |
+| user           | references    | foreign_key: true, null: false |
+| item           | references    | foreign_key: true, null: false |
 
 ### Association
 
-- belongs_to :record
+- belongs_to :users
+- has_one    :items
+- has_one    :addresses
+
+
+## addresses テーブル
+
+| Column            | Type          | Options                        |
+| ----------------- | ------------- | ------------------------------ |
+| post_code         | string        | null: false                    |
+| shipping_place_id | integer       | null: false                    |
+| city              | string        | null: false                    |
+| address           | string        | null: false                    |
+| building_name     | string        |                                |
+| phone             | string        | null: false                    |
+| order             | references    | foreign_key: true, null: false |
+
+### Association
+
+- has_one    :orders
