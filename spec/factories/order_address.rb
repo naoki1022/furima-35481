@@ -8,7 +8,5 @@ FactoryBot.define do
     building_name { '東京ハイツ' }
     phone { '09012345678' }
 
-    association :user
-
   end
 end
